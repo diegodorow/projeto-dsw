@@ -27,6 +27,9 @@ public class UsuarioResource {
 
 	@PostMapping("/users")
 	public ResponseEntity<Usuario> createUser(@Valid @RequestBody Usuario user) {
+		Credencial credencial = new Credencial();
+		String senhaEnc = credencial.getSenhaCriptografada()[0];
+		user.setSenha(senhaEnc);
 		Usuario savedUser = usuarioRepository.save(user);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId())
 				.toUri();
@@ -49,6 +52,7 @@ public class UsuarioResource {
 
 	@PostMapping("/autenticar")
 	public Boolean autenticar(@RequestBody Credencial credencial) {
+		System.out.println("Entrou na função autenticar");
 		String senhaEnc = credencial.getSenhaCriptografada()[0];
 		String salt = credencial.getSenhaCriptografada()[1];
 
