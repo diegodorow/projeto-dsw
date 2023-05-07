@@ -1,8 +1,13 @@
 package dsw.projeto.projetodsw.model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Produto {
@@ -15,6 +20,10 @@ public class Produto {
 	private float valor;
 	private String tamanho;
 	private String cor;
+	
+	@OneToMany(mappedBy = "produto")
+	@JsonIgnore
+	private List<Estoque> estoque;
 
 	public Produto() {
 

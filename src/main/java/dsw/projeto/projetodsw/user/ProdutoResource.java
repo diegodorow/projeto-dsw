@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import dsw.projeto.projetodsw.jpa.EstoqueRepository;
 import dsw.projeto.projetodsw.jpa.ProdutoRepository;
+import dsw.projeto.projetodsw.model.Estoque;
 import dsw.projeto.projetodsw.model.Produto;
 import jakarta.validation.Valid;
 
@@ -21,10 +23,12 @@ import jakarta.validation.Valid;
 public class ProdutoResource {
 
 	private ProdutoRepository produtoRepository;
+	private EstoqueRepository estoqueRepository;
 
-	public ProdutoResource(ProdutoRepository repository) {
+	public ProdutoResource(ProdutoRepository repository, EstoqueRepository estoqueRepository) {
 		super();
 		this.produtoRepository = repository;
+		this.estoqueRepository = estoqueRepository;
 	}
 
 	@PostMapping("/produtos")
@@ -49,10 +53,19 @@ public class ProdutoResource {
 		}
 		return produto.get();
 	}
-	
+
 	@DeleteMapping("/produtos/{idCamisa}")
 	public void excluirCamisa(@PathVariable int idCamisa) {
 		produtoRepository.deleteById(idCamisa);
+	}
+
+	@PostMapping("/estoque")
+	public ResponseEntity<Estoque> addEstoque(@Valid @RequestBody Estoque estoque) {
+		System.out.println("Criando produto " + estoque.getProduto());
+		Estoque savedEstoque = estoqueRepository.save(estoque);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(savedEstoque.getId()).toUri();
+		return ResponseEntity.created(location).build();
 	}
 
 }
