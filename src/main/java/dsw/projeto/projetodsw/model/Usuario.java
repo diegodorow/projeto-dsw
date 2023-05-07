@@ -1,4 +1,4 @@
-package dsw.projeto.projetodsw.user;
+package dsw.projeto.projetodsw.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,8 +24,6 @@ public class Usuario {
 	@NotNull
 	private String senha;
 
-	private String salt;
-
 	private String cartao;
 	private String validade;
 	private int numeroCvv;
@@ -36,8 +34,8 @@ public class Usuario {
 	private String bairro;
 	private String cidade;
 	private String uf;
-	private int tipo;
-	
+	private String administrador;
+
 	public Usuario() {
 
 	}
@@ -83,14 +81,6 @@ public class Usuario {
 
 	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-
-	public String getSalt() {
-		return salt;
-	}
-
-	public void setSalt(String salt) {
-		this.salt = salt;
 	}
 
 	public String getCartao() {
@@ -173,12 +163,12 @@ public class Usuario {
 		this.uf = uf;
 	}
 
-	public int getTipo() {
-		return tipo;
+	public String getAdministrador() {
+		return administrador;
 	}
 
-	public void setTipo(int tipo) {
-		this.tipo = tipo;
+	public void setAdministrador(String tipo) {
+		this.administrador = tipo;
 	}
 
 }

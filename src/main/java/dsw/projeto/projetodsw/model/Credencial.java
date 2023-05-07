@@ -1,4 +1,4 @@
-package dsw.projeto.projetodsw.user;
+package dsw.projeto.projetodsw.model;
 
 import org.mindrot.jbcrypt.BCrypt;
 

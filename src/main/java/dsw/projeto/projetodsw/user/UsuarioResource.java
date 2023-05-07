@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import dsw.projeto.projetodsw.jpa.UsuarioRepository;
+import dsw.projeto.projetodsw.model.Credencial;
+import dsw.projeto.projetodsw.model.Usuario;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,9 +29,6 @@ public class UsuarioResource {
 
 	@PostMapping("/users")
 	public ResponseEntity<Usuario> createUser(@Valid @RequestBody Usuario user) {
-		Credencial credencial = new Credencial();
-		String senhaEnc = credencial.getSenhaCriptografada()[0];
-		user.setSenha(senhaEnc);
 		Usuario savedUser = usuarioRepository.save(user);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId())
 				.toUri();
@@ -52,21 +51,48 @@ public class UsuarioResource {
 
 	@PostMapping("/autenticar")
 	public Boolean autenticar(@RequestBody Credencial credencial) {
-		System.out.println("Entrou na função autenticar");
-		String senhaEnc = credencial.getSenhaCriptografada()[0];
-		String salt = credencial.getSenhaCriptografada()[1];
-
 		Optional<Usuario> usuario = usuarioRepository.findByUsuario(credencial.getUsername());
 		if (usuario.isEmpty()) {
 			return false;
 		}
 
-		boolean passwordMatch = BCrypt.checkpw(credencial.getSenha(), usuario.get().getSenha());
+		boolean passwordMatch = false;
+		if (credencial.getSenha().equals(usuario.get().getSenha())) {
+			passwordMatch = true;
+		}
 
-		if (passwordMatch) {
-			return true;
-		} else {
+		return passwordMatch;
+	}
+	
+	@PostMapping("/validaradm")
+	public Boolean validaradm(@RequestBody Credencial credencial) {
+		Optional<Usuario> usuario = usuarioRepository.findByUsuario(credencial.getUsername());
+		if (usuario.isEmpty()) {
 			return false;
 		}
+
+		String tipo = "Administrador";
+		boolean validarAdmin = false;
+		if (tipo.equals(usuario.get().getAdministrador())) {
+			validarAdmin = true;
+		}
+		
+		return validarAdmin;
+	}
+	
+	@PostMapping("/validarcliente")
+	public Boolean validarcliente(@RequestBody Credencial credencial) {
+		Optional<Usuario> usuario = usuarioRepository.findByUsuario(credencial.getUsername());
+		if (usuario.isEmpty()) {
+			return false;
+		}
+
+		String tipo = "Cliente";
+		boolean validarAdmin = false;
+		if (tipo.equals(usuario.get().getAdministrador())) {
+			validarAdmin = true;
+		}
+		
+		return validarAdmin;
 	}
 }
