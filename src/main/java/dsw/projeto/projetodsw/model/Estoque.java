@@ -1,8 +1,12 @@
 package dsw.projeto.projetodsw.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Estoque {
@@ -10,7 +14,9 @@ public class Estoque {
 	@GeneratedValue
 	private int id;
 
-	private int produto;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	private Produto produto;
 	private int pedido;
 	private String operacao;
 	private int quantidade;
@@ -20,7 +26,7 @@ public class Estoque {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Estoque(int id, int produto, int pedido, String operacao, int quantidade) {
+	public Estoque(int id, Produto produto, int pedido, String operacao, int quantidade) {
 		super();
 		this.id = id;
 		this.produto = produto;
@@ -37,11 +43,11 @@ public class Estoque {
 		this.id = id;
 	}
 
-	public int getProduto() {
+	public Produto getProduto() {
 		return produto;
 	}
 
-	public void setProduto(int produto) {
+	public void setProduto(Produto produto) {
 		this.produto = produto;
 	}
 

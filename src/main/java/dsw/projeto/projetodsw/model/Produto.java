@@ -18,9 +18,11 @@ public class Produto {
 
 	private String descricao;
 	private float valor;
+	private int quantidade;
 	private String tamanho;
 	private String cor;
-	
+	private String imagem;
+
 	@OneToMany(mappedBy = "produto")
 	@JsonIgnore
 	private List<Estoque> estoque;
@@ -29,13 +31,17 @@ public class Produto {
 
 	}
 
-	public Produto(Integer id, String descricao, float valor, String tamanho, String cor) {
+	public Produto(Integer id, String descricao, float valor, int quantidade, String tamanho, String cor, String imagem,
+			List<Estoque> estoque) {
 		super();
 		this.id = id;
 		this.descricao = descricao;
 		this.valor = valor;
+		this.quantidade = quantidade;
 		this.tamanho = tamanho;
 		this.cor = cor;
+		this.imagem = imagem;
+		this.estoque = estoque;
 	}
 
 	public Integer getId() {
@@ -78,10 +84,26 @@ public class Produto {
 		this.cor = cor;
 	}
 
+	public int getQuantidade() {
+		return quantidade;
+	}
+
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
+	}
+
+	public String getImagem() {
+		return imagem;
+	}
+
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
+	}
+
 	@Override
 	public String toString() {
-		return "Produto [id=" + id + ", descricao=" + descricao + ", valor=" + valor + ", tamanho=" + tamanho + ", cor="
-				+ cor + "]";
+		return "Produto [id=" + id + ", descricao=" + descricao + ", valor=" + valor + ", quantidade=" + quantidade
+				+ ", tamanho=" + tamanho + ", cor=" + cor + ", imagem=" + imagem + ", estoque=" + estoque + "]";
 	}
 
 }

@@ -33,10 +33,21 @@ public class ProdutoResource {
 
 	@PostMapping("/produtos")
 	public ResponseEntity<Produto> createProduto(@Valid @RequestBody Produto produto) {
-		System.out.println("Criando produto " + produto.getDescricao());
+		System.out.println("Criando o produto id " + produto.getDescricao());
 		Produto savedProduto = produtoRepository.save(produto);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedProduto.getId()).toUri();
+
+		System.out.println("Adicionando estoque do produto id " + savedProduto.getId());
+		Optional<Produto> produtoId = produtoRepository.findById(savedProduto.getId());
+		Estoque estoque = new Estoque();
+		estoque.setProduto(produtoId.get());
+		estoque.setOperacao("Cadastro de produto");
+		estoque.setQuantidade(produto.getQuantidade());
+		Estoque savedEstoque = estoqueRepository.save(estoque);
+		location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedEstoque.getId())
+				.toUri();
+
 		return ResponseEntity.created(location).build();
 	}
 
@@ -59,9 +70,11 @@ public class ProdutoResource {
 		produtoRepository.deleteById(idCamisa);
 	}
 
-	@PostMapping("/estoque")
-	public ResponseEntity<Estoque> addEstoque(@Valid @RequestBody Estoque estoque) {
-		System.out.println("Criando produto " + estoque.getProduto());
+	@PostMapping("/addestoque/{id}")
+	public ResponseEntity<Estoque> addEstoque(@PathVariable int id, @Valid @RequestBody Estoque estoque) {
+		System.out.println("Adicionando estoque do produto id " + id);
+		Optional<Produto> produto = produtoRepository.findById(id);
+		estoque.setProduto(produto.get());
 		Estoque savedEstoque = estoqueRepository.save(estoque);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedEstoque.getId()).toUri();
