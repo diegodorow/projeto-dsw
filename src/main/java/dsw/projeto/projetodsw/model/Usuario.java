@@ -35,6 +35,7 @@ public class Usuario {
 	private String cidade;
 	private String uf;
 	private String administrador;
+	private int status;
 
 	public Usuario() {
 
@@ -60,11 +61,6 @@ public class Usuario {
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", nome=" + nome + "]";
 	}
 
 	public String getUsuario() {
@@ -169,6 +165,22 @@ public class Usuario {
 
 	public void setAdministrador(String tipo) {
 		this.administrador = tipo;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nome=" + nome + ", usuario=" + usuario + ", senha=" + senha + ", cartao="
+				+ cartao + ", validade=" + validade + ", numeroCvv=" + numeroCvv + ", cep=" + cep + ", endereco="
+				+ endereco + ", numero=" + numero + ", complemento=" + complemento + ", bairro=" + bairro + ", cidade="
+				+ cidade + ", uf=" + uf + ", administrador=" + administrador + ", status=" + status + "]";
 	}
 
 }
