@@ -29,6 +29,8 @@ public class UsuarioResource {
 
 	@PostMapping("/users")
 	public ResponseEntity<Usuario> createUser(@Valid @RequestBody Usuario user) {
+		System.out.println("número entrega " + user.getEntreganumero());
+		System.out.println("bairro entrega " + user.getEntregabairro());
 		Usuario savedUser = usuarioRepository.save(user);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId())
 				.toUri();

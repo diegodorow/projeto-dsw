@@ -36,16 +36,54 @@ public class Usuario {
 	private String uf;
 	private String administrador;
 	private int status;
+	
+	private String entregacep;
+	private String entregaendereco;
+	private int entreganumero;
+	private String entregacomplemento;
+	private String entregabairro;
+	private String entregacidade;
+	private String entregauf;
+	
 
 	public Usuario() {
 
 	}
 
-	public Usuario(Integer id, String nome) {
+	
+
+	public Usuario(Integer id, @Size(min = 3, message = "O nome deve conter ao menos três letras") String nome,
+			@NotNull String usuario, @Size(min = 1) @NotNull String senha, String cartao, String validade,
+			int numeroCvv, String cep, String endereco, int numero, String complemento, String bairro, String cidade,
+			String uf, String administrador, int status, String entregacep, String entregaendereco, int entreganumero,
+			String entregacomplemento, String entregabairro, String entregacidade, String entregauf) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.usuario = usuario;
+		this.senha = senha;
+		this.cartao = cartao;
+		this.validade = validade;
+		this.numeroCvv = numeroCvv;
+		this.cep = cep;
+		this.endereco = endereco;
+		this.numero = numero;
+		this.complemento = complemento;
+		this.bairro = bairro;
+		this.cidade = cidade;
+		this.uf = uf;
+		this.administrador = administrador;
+		this.status = status;
+		this.entregacep = entregacep;
+		this.entregaendereco = entregaendereco;
+		this.entreganumero = entreganumero;
+		this.entregacomplemento = entregacomplemento;
+		this.entregabairro = entregabairro;
+		this.entregacidade = entregacidade;
+		this.entregauf = entregauf;
 	}
+
+
 
 	public Integer getId() {
 		return id;
@@ -175,12 +213,103 @@ public class Usuario {
 		this.status = status;
 	}
 
+
+
+	public String getEntregacep() {
+		return entregacep;
+	}
+
+
+
+	public void setEntregacep(String entregacep) {
+		this.entregacep = entregacep;
+	}
+
+
+
+	public String getEntregaendereco() {
+		return entregaendereco;
+	}
+
+
+
+	public void setEntregaendereco(String entregaendereco) {
+		this.entregaendereco = entregaendereco;
+	}
+
+
+
+	public int getEntreganumero() {
+		return entreganumero;
+	}
+
+
+
+	public void setEntreganumero(int entreganumero) {
+		this.entreganumero = entreganumero;
+	}
+
+
+
+	public String getEntregacomplemento() {
+		return entregacomplemento;
+	}
+
+
+
+	public void setEntregacomplemento(String entregacomplemento) {
+		this.entregacomplemento = entregacomplemento;
+	}
+
+
+
+	public String getEntregabairro() {
+		return entregabairro;
+	}
+
+
+
+	public void setEntregabairro(String entregabairro) {
+		this.entregabairro = entregabairro;
+	}
+
+
+
+	public String getEntregacidade() {
+		return entregacidade;
+	}
+
+
+
+	public void setEntregacidade(String entregacidade) {
+		this.entregacidade = entregacidade;
+	}
+
+
+
+	public String getEntregauf() {
+		return entregauf;
+	}
+
+
+
+	public void setEntregauf(String entregauf) {
+		this.entregauf = entregauf;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", nome=" + nome + ", usuario=" + usuario + ", senha=" + senha + ", cartao="
 				+ cartao + ", validade=" + validade + ", numeroCvv=" + numeroCvv + ", cep=" + cep + ", endereco="
 				+ endereco + ", numero=" + numero + ", complemento=" + complemento + ", bairro=" + bairro + ", cidade="
-				+ cidade + ", uf=" + uf + ", administrador=" + administrador + ", status=" + status + "]";
+				+ cidade + ", uf=" + uf + ", administrador=" + administrador + ", status=" + status + ", entregacep="
+				+ entregacep + ", entregaendereco=" + entregaendereco + ", entreganumero=" + entreganumero
+				+ ", entregacomplemento=" + entregacomplemento + ", entregabairro=" + entregabairro + ", entregacidade="
+				+ entregacidade + ", entregauf=" + entregauf + "]";
 	}
+
+	
 
 }
