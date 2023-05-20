@@ -14,7 +14,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import dsw.projeto.projetodsw.jpa.PedidoRepository;
 import dsw.projeto.projetodsw.model.Confirmar;
+import dsw.projeto.projetodsw.model.EstoqueCamisa;
 import dsw.projeto.projetodsw.model.Pedido;
+import jakarta.validation.Valid;
 
 @RestController
 public class PedidoResource {
@@ -26,15 +28,32 @@ public class PedidoResource {
 		this.pedidoRepository = pedidoRepository;
 	}
 
+	@PostMapping("/pedidos")
+	public ResponseEntity<Pedido> createPedido(@Valid @RequestBody Pedido pedido,
+			@RequestBody EstoqueCamisa itens) {
+		System.out.println("itens: " + itens);
+		Pedido savedPedido = pedidoRepository.save(pedido);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(savedPedido.getId()).toUri();
+		/*for (int i = 0; i < itens.size(); i++) {
+			System.out.println("Estoque ao criar produto, i: " + i + ", " + itens.get(i).getDescricao());
+		}*/
+		return ResponseEntity.created(location).build();
+	}
+
 	@GetMapping("/pedidos")
 	public List<Pedido> allPedidos() {
 		return pedidoRepository.findAll();
 	}
 
+	@GetMapping("/pedidos/{id}")
+	public List<Pedido> getPedidos(@PathVariable int id) throws Exception {
+		return pedidoRepository.findByCliente(id);
+	}
+
 	@PostMapping("/confirmarpedidos/{id}")
 	public ResponseEntity<Pedido> confirmarPedidos(@PathVariable int id, @RequestBody Confirmar confirmar) {
 		int status = confirmar.getStatus();
-		System.out.println("Alterando o status do pedido id " + id + ", status: " + status);
 		Optional<Pedido> user = pedidoRepository.findById(id);
 		user.get().setStatus(status);
 		Pedido savedPedido = pedidoRepository.save(user.get());

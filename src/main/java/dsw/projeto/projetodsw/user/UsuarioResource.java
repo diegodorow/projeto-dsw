@@ -29,8 +29,6 @@ public class UsuarioResource {
 
 	@PostMapping("/users")
 	public ResponseEntity<Usuario> createUser(@Valid @RequestBody Usuario user) {
-		System.out.println("número entrega " + user.getEntreganumero());
-		System.out.println("bairro entrega " + user.getEntregabairro());
 		Usuario savedUser = usuarioRepository.save(user);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedUser.getId())
 				.toUri();
@@ -42,11 +40,11 @@ public class UsuarioResource {
 		return usuarioRepository.findAll();
 	}
 
-	@GetMapping("/users/{id}")
-	public Usuario getUser(@PathVariable int id) throws Exception {
-		Optional<Usuario> user = usuarioRepository.findById(id);
+	@GetMapping("/users/{username}")
+	public Usuario getUser(@PathVariable String username) throws Exception {
+		Optional<Usuario> user = usuarioRepository.findByUsuario(username);
 		if (user.isEmpty()) {
-			throw new Exception("Erro: id do usuário não encontrado: " + id);
+			throw new Exception("Erro: id do usuário não encontrado: " + username);
 		}
 		return user.get();
 	}
@@ -106,7 +104,6 @@ public class UsuarioResource {
 	@PostMapping("/bloquearclientes/{id}")
 	public ResponseEntity<Usuario> bloquearCliente(@PathVariable int id, @RequestBody Confirmar bloqueio) {
 		int status = bloqueio.getStatus();
-		System.out.println("Alterando o status do cliente id " + id + ", status: " + status);
 		Optional<Usuario> user = usuarioRepository.findById(id);
 		user.get().setStatus(status);
 		Usuario savedUsuario = usuarioRepository.save(user.get());

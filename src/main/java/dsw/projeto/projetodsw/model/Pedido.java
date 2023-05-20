@@ -1,7 +1,10 @@
 package dsw.projeto.projetodsw.model;
 
+import java.sql.Date;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,24 +18,33 @@ public class Pedido {
 	@GeneratedValue
 	private Integer id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JsonIgnore
-	private Usuario cliente;
 	private String cartao;
+	private String entrega;
+
+	@Column(name = "previsao", columnDefinition = "TIMESTAMP")
+	private Date previsao;
+
+	@Column(name = "dthrpedido", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private Date dthrpedido;
 	private float valor;
 	private int status;
+	private int cliente;
 
 	public Pedido() {
 		super();
 	}
 
-	public Pedido(Integer id, Usuario cliente, String cartao, float valor, int status) {
+	public Pedido(Integer id, String cartao, String entrega, Date previsao, Date dthrpedido, float valor, int status,
+			int cliente) {
 		super();
 		this.id = id;
-		this.cliente = cliente;
 		this.cartao = cartao;
+		this.entrega = entrega;
+		this.previsao = previsao;
+		this.dthrpedido = dthrpedido;
 		this.valor = valor;
 		this.status = status;
+		this.cliente = cliente;
 	}
 
 	public Integer getId() {
@@ -41,14 +53,6 @@ public class Pedido {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Usuario getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(Usuario cliente) {
-		this.cliente = cliente;
 	}
 
 	public String getCartao() {
@@ -75,10 +79,43 @@ public class Pedido {
 		this.status = status;
 	}
 
+	public String getEntrega() {
+		return entrega;
+	}
+
+	public void setEntrega(String entrega) {
+		this.entrega = entrega;
+	}
+
+	public Date getPrevisao() {
+		return previsao;
+	}
+
+	public void setPrevisao(Date previsao) {
+		this.previsao = previsao;
+	}
+
+	public Date getDthrpedido() {
+		return dthrpedido;
+	}
+
+	public void setDthrpedido(Date dthrpedido) {
+		this.dthrpedido = dthrpedido;
+	}
+
+	public int getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(int cliente) {
+		this.cliente = cliente;
+	}
+
 	@Override
 	public String toString() {
-		return "Pedido [id=" + id + ", cliente=" + cliente + ", cartao=" + cartao + ", valor=" + valor + ", status="
-				+ status + "]";
+		return "Pedido [id=" + id + ", cartao=" + cartao + ", entrega=" + entrega + ", previsao=" + previsao
+				+ ", dthrpedido=" + dthrpedido + ", valor=" + valor + ", status=" + status + ", cliente=" + cliente
+				+ "]";
 	}
 
 }
