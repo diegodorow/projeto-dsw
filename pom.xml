@@ -44,6 +44,11 @@
 			<artifactId>jbcrypt</artifactId>
 			<version>0.4</version>
 		</dependency>
+		<dependency>
+			<groupId>br.udesc.ceavi.eso.dsw</groupId>
+			<artifactId>primeiro-projeto</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

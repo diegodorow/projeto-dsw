@@ -1,6 +1,7 @@
 package dsw.projeto.projetodsw.user;
 
 import java.net.URI;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import dsw.projeto.projetodsw.jpa.PedidoRepository;
 import dsw.projeto.projetodsw.model.Confirmar;
-import dsw.projeto.projetodsw.model.EstoqueCamisa;
 import dsw.projeto.projetodsw.model.Pedido;
 import jakarta.validation.Valid;
 
@@ -29,16 +29,11 @@ public class PedidoResource {
 	}
 
 	@PostMapping("/pedidos")
-	public ResponseEntity<Pedido> createPedido(@Valid @RequestBody Pedido pedido,
-			@RequestBody EstoqueCamisa itens) {
-		System.out.println("itens: " + itens);
+	public int createPedido(@Valid @RequestBody Pedido pedido) {
+		Calendar dataPedido = Calendar.getInstance();
+		pedido.setDthrpedido(dataPedido);
 		Pedido savedPedido = pedidoRepository.save(pedido);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(savedPedido.getId()).toUri();
-		/*for (int i = 0; i < itens.size(); i++) {
-			System.out.println("Estoque ao criar produto, i: " + i + ", " + itens.get(i).getDescricao());
-		}*/
-		return ResponseEntity.created(location).build();
+		return savedPedido.getId();
 	}
 
 	@GetMapping("/pedidos")
@@ -54,9 +49,11 @@ public class PedidoResource {
 	@PostMapping("/confirmarpedidos/{id}")
 	public ResponseEntity<Pedido> confirmarPedidos(@PathVariable int id, @RequestBody Confirmar confirmar) {
 		int status = confirmar.getStatus();
-		Optional<Pedido> user = pedidoRepository.findById(id);
-		user.get().setStatus(status);
-		Pedido savedPedido = pedidoRepository.save(user.get());
+		Optional<Pedido> pedido = pedidoRepository.findById(id);
+		Calendar dataPrevisao = Calendar.getInstance();
+		pedido.get().setStatus(status);
+		pedido.get().setPrevisao(dataPrevisao);
+		Pedido savedPedido = pedidoRepository.save(pedido.get());
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedPedido.getId()).toUri();
 		return ResponseEntity.created(location).build();

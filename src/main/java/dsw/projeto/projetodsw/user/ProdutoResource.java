@@ -16,12 +16,18 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import dsw.projeto.projetodsw.jpa.EstoqueRepository;
 import dsw.projeto.projetodsw.jpa.ProdutoRepository;
 import dsw.projeto.projetodsw.model.Estoque;
+import dsw.projeto.projetodsw.model.EstoqueCamisa;
 import dsw.projeto.projetodsw.model.Produto;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import jakarta.validation.Valid;
 
 @RestController
 public class ProdutoResource {
 
+	@PersistenceContext
+	private EntityManager em;
 	private ProdutoRepository produtoRepository;
 	private EstoqueRepository estoqueRepository;
 
@@ -79,6 +85,47 @@ public class ProdutoResource {
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(savedEstoque.getId()).toUri();
 		return ResponseEntity.created(location).build();
+	}
+
+	@PostMapping("/baixaestoque")
+	public boolean baixaEstoque(@Valid @RequestBody EstoqueCamisa estoque) {
+		System.out.println("Registrando venda do produto id " + estoque.getId_produto());
+		System.out.println("Registrando venda do pedido id " + estoque.getId_pedido());
+		if (estoque.getId_produto() > 0) {
+			Optional<Produto> produtoId = produtoRepository.findById(estoque.getId_produto());
+			Estoque addEstoque = new Estoque();
+			addEstoque.setProduto(produtoId.get());
+			addEstoque.setOperacao("Venda");
+			addEstoque.setPedido(estoque.getId_pedido());
+			addEstoque.setQuantidade(1);
+			Estoque savedEstoque = estoqueRepository.save(addEstoque);
+
+			// atualizar a quantidade em estoque do produto
+			Produto produto = produtoId.get();
+			int novaQuantidade = produto.getQuantidade() - 1;
+			produto.setQuantidade(novaQuantidade);
+			Produto savedProduto = produtoRepository.save(produto);
+			URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+					.buildAndExpand(savedEstoque.getId()).toUri();
+			return true;
+		}
+		System.out.println("Não registou a baixa do produto");
+		return false;
+	}
+
+	@GetMapping("/dashboard")
+	@SuppressWarnings("unchecked")
+	public int getDashboard() {
+		System.out.println("Entrou na função getDashboard()");
+		/*Query query = em.createQuery("select produto.id,\r\n" + "			   produto.descricao,\r\n"
+				+ "			   sum(estoque.quantidade) as qtd \r\n" + "		  from estoque \r\n"
+				+ "		  join pedido on (pedido.id = estoque.pedido)\r\n"
+				+ "		  join produto on (produto.id = estoque.produto_id)\r\n"
+				+ "		 where estoque.operacao = 'Venda'\r\n" + "		   and pedido.status = 1\r\n"
+				+ "	  group by produto.id,\r\n" + "			   produto.descricao");*/
+		Query query = em.createQuery("select coalesce(max(previsao),current_date) from pedido");
+		System.out.println("Query Dashboard> " + query);
+		return query.getMaxResults();
 	}
 
 }

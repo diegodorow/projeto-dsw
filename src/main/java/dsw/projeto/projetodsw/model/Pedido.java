@@ -1,17 +1,16 @@
 package dsw.projeto.projetodsw.model;
 
 import java.sql.Date;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Calendar;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "pedido")
 public class Pedido {
 
 	@Id
@@ -22,10 +21,10 @@ public class Pedido {
 	private String entrega;
 
 	@Column(name = "previsao", columnDefinition = "TIMESTAMP")
-	private Date previsao;
+	private Calendar previsao;
 
 	@Column(name = "dthrpedido", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-	private Date dthrpedido;
+	private Calendar dthrpedido;
 	private float valor;
 	private int status;
 	private int cliente;
@@ -34,8 +33,8 @@ public class Pedido {
 		super();
 	}
 
-	public Pedido(Integer id, String cartao, String entrega, Date previsao, Date dthrpedido, float valor, int status,
-			int cliente) {
+	public Pedido(Integer id, String cartao, String entrega, Calendar previsao, Calendar dthrpedido, float valor,
+			int status, int cliente) {
 		super();
 		this.id = id;
 		this.cartao = cartao;
@@ -87,19 +86,19 @@ public class Pedido {
 		this.entrega = entrega;
 	}
 
-	public Date getPrevisao() {
+	public Calendar getPrevisao() {
 		return previsao;
 	}
 
-	public void setPrevisao(Date previsao) {
+	public void setPrevisao(Calendar previsao) {
 		this.previsao = previsao;
 	}
 
-	public Date getDthrpedido() {
+	public Calendar getDthrpedido() {
 		return dthrpedido;
 	}
 
-	public void setDthrpedido(Date dthrpedido) {
+	public void setDthrpedido(Calendar dthrpedido) {
 		this.dthrpedido = dthrpedido;
 	}
 
